@@ -2,7 +2,7 @@
   "name": "tic-tac-toe-frontend",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://BrysWU.github.io/tic-tac-toe-live",
+  "homepage": "https://bryswu.github.io/TicTacGo/",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
