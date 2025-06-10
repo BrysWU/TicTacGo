@@ -21,10 +21,10 @@ function App() {
           <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 6, pb: 1 }}>
             <img src={logo} alt="Tic Tac Toe" width={70} style={{ filter: "invert(1)", marginBottom: 12 }}/>
             <Typography variant="h2" align="center" sx={{ fontWeight: 900, letterSpacing: 2 }}>
-              Tic Tac Toe Live
+              Tic Tac Go!
             </Typography>
             <Typography align="center" sx={{ opacity: 0.7, fontSize: 18, fontWeight: 400, mt: 1 }}>
-              Play real-time with others &amp; chat!
+              Play Tic Tac Toe  &amp; chat with others in real-time!
             </Typography>
           </Box>
         </Fade>
@@ -37,7 +37,7 @@ function App() {
         </Paper>
       </Container>
       <Box sx={{ textAlign: "center", mt: 6, opacity: 0.5, fontSize: 14 }}>
-        &copy; {new Date().getFullYear()} Tic Tac Toe Live | Made with 💙 and MUI
+        &copy; {new Date().getFullYear()} Tic Tac Go! | Made with 💙 and MUI
       </Box>
     </Box>
   );
