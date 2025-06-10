@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { io } from "socket.io-client";
 
 // Replace with your Render backend URL after deploying!
-const SOCKET_URL = "https://your-render-backend-url.onrender.com";
+const SOCKET_URL = "https://ttgback.onrender.com";
 
 let socket;
 
