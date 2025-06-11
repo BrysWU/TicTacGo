@@ -113,7 +113,7 @@ function App() {
               align="center"
               sx={{ fontWeight: 900, letterSpacing: 2 }}
             >
-              Tic Tac Toe Live
+              Tic Tac Go!
             </Typography>
             <Typography
               align="center"
