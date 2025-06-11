@@ -31,13 +31,11 @@ function App() {
   const [loginOpen, setLoginOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
 
-  // When a user signs in or signs up, clear guest nickname
   if (user && nickname) {
     setNickname("");
     localStorage.removeItem("guestNickname");
   }
 
-  // If user logs out, nickname prompt resets
   const handleLogout = () => {
     logout();
     setNickname("");
@@ -115,7 +113,7 @@ function App() {
               align="center"
               sx={{ fontWeight: 900, letterSpacing: 2 }}
             >
-              Tic Tac Go!
+              Tic Tac Toe Live
             </Typography>
             <Typography
               align="center"
