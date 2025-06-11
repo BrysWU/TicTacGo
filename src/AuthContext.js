@@ -82,9 +82,22 @@ export function AuthProvider({ children }) {
     return { ok: true, url: `${API_URL}${data.url}` };
   }
 
+  async function updateUsername(newUsername) {
+    if (!token) return { ok: false };
+    try {
+      const { data } = await axios.put(`${API_URL}/api/me/username`, { username: newUsername }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUser(data);
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: e.response?.data?.error || "Update failed" };
+    }
+  }
+
   return (
     <AuthContext.Provider value={{
-      user, token, loading, login, signup, logout, refreshProfile, uploadAvatar
+      user, token, loading, login, signup, logout, refreshProfile, uploadAvatar, updateUsername
     }}>
       {children}
     </AuthContext.Provider>
