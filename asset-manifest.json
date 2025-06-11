@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.js": "/TicTacGo/static/js/main.31a0cb6c.js",
+    "static/media/logo.svg": "/TicTacGo/static/media/logo.170c7938dfdcf24eafa79a5a1fc520f1.svg",
+    "index.html": "/TicTacGo/index.html",
+    "main.31a0cb6c.js.map": "/TicTacGo/static/js/main.31a0cb6c.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.31a0cb6c.js"
+  ]
+}
