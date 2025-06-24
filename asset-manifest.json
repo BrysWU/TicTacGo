@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/TicTacGo/static/js/main.f73abefd.js",
+    "main.js": "/TicTacGo/static/js/main.2586095a.js",
     "static/media/logo.svg": "/TicTacGo/static/media/logo.170c7938dfdcf24eafa79a5a1fc520f1.svg",
     "index.html": "/TicTacGo/index.html",
-    "main.f73abefd.js.map": "/TicTacGo/static/js/main.f73abefd.js.map"
+    "main.2586095a.js.map": "/TicTacGo/static/js/main.2586095a.js.map"
   },
   "entrypoints": [
-    "static/js/main.f73abefd.js"
+    "static/js/main.2586095a.js"
   ]
 }
