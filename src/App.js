@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -30,6 +30,14 @@ function BuyPointsPopup({ open, onClose, user }) {
   const [showShop, setShowShop] = useState(false);
   const [redirect, setRedirect] = useState(false);
 
+  // Reset state when popup opens
+  useEffect(() => {
+    if (open) {
+      setShowShop(false);
+      setRedirect(false);
+    }
+  }, [open]);
+
   const pointOptions = [
     { label: "Small Pack", points: 100, price: "$0.99" },
     { label: "Medium Pack", points: 500, price: "$3.99" },
@@ -43,11 +51,16 @@ function BuyPointsPopup({ open, onClose, user }) {
     return (
       <Modal open={open} onClose={onClose}>
         <Box sx={{
-          position: "absolute",
+          position: "fixed",
           top: "50%", left: "50%",
           transform: "translate(-50%, -50%)",
           bgcolor: "#232f4b", p: 5, borderRadius: 4,
-          minWidth: 340, boxShadow: 24, color: "#fff", textAlign: "center"
+          minWidth: 340, boxShadow: 24, color: "#fff", textAlign: "center",
+          zIndex: 1500,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
         }}>
           <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
             You can't buy what doesn't exist
@@ -67,85 +80,85 @@ function BuyPointsPopup({ open, onClose, user }) {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Slide in={open} direction="down">
-        <Box sx={{
-          position: "absolute",
-          top: "50%", left: "50%",
-          transform: "translate(-50%, -50%)",
-          bgcolor: "#232f4b", color: "#fff", borderRadius: 4,
-          boxShadow: 24, minWidth: 340, px: 4, py: 4,
-          minHeight: showShop ? 420 : 230,
-          display: "flex", flexDirection: "column", alignItems: "center",
-          transition: "min-height 0.3s",
+      <Box sx={{
+        position: "fixed",
+        top: "50%", left: "50%",
+        transform: "translate(-50%, -50%)",
+        bgcolor: "#232f4b", color: "#fff", borderRadius: 4,
+        boxShadow: 24, minWidth: 340, px: 4, py: 4,
+        minHeight: showShop ? 420 : 230,
+        display: "flex", flexDirection: "column", alignItems: "center",
+        justifyContent: "center",
+        transition: "min-height 0.3s",
+        zIndex: 1500
+      }}>
+        <IconButton
+          onClick={onClose}
+          sx={{
+            position: "absolute", top: 12, right: 12,
+            color: "#fff", bgcolor: "#233", "&:hover": { bgcolor: "#223" }
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <MonetizationOnIcon sx={{ color: "#ffb300", fontSize: 50, mb: 0.5 }} />
+        <Typography variant="h5" sx={{ fontWeight: 700, mt: 1, mb: 1 }}>
+          Your Points
+        </Typography>
+        <Typography sx={{
+          fontSize: 36, fontWeight: 900, color: "#ffb300", mb: 2,
+          textShadow: "0 2px 12px #000"
         }}>
-          <IconButton
-            onClick={onClose}
-            sx={{
-              position: "absolute", top: 12, right: 12,
-              color: "#fff", bgcolor: "#233", "&:hover": { bgcolor: "#223" }
-            }}
+          {typeof user?.points === "number" ? user.points : "—"}
+        </Typography>
+        {!showShop ? (
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{ fontWeight: 700, borderRadius: 3, px: 5, fontSize: 18, mt: 2 }}
+            onClick={() => setShowShop(true)}
           >
-            <CloseIcon />
-          </IconButton>
-          <MonetizationOnIcon sx={{ color: "#ffb300", fontSize: 50, mb: 0.5 }} />
-          <Typography variant="h5" sx={{ fontWeight: 700, mt: 1, mb: 1 }}>
-            Your Points
-          </Typography>
-          <Typography sx={{
-            fontSize: 36, fontWeight: 900, color: "#ffb300", mb: 2,
-            textShadow: "0 2px 12px #000"
+            Buy Points
+          </Button>
+        ) : (
+          <Box sx={{
+            width: "100%",
+            mt: 2,
+            borderTop: "1px solid #333",
+            pt: 2
           }}>
-            {typeof user?.points === "number" ? user.points : "—"}
-          </Typography>
-          {!showShop ? (
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ fontWeight: 700, borderRadius: 3, px: 5, fontSize: 18, mt: 2 }}
-              onClick={() => setShowShop(true)}
-            >
-              Buy Points
-            </Button>
-          ) : (
-            <Box sx={{
-              width: "100%",
-              mt: 2,
-              borderTop: "1px solid #333",
-              pt: 2
-            }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
-                Shop Options
-              </Typography>
-              {pointOptions.map(opt => (
-                <Box
-                  key={opt.label}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    bgcolor: "rgba(255,255,255,0.06)",
-                    px: 3, py: 2, borderRadius: 2, mb: 1.5,
-                  }}>
-                  <Box>
-                    <Typography sx={{ fontWeight: 700, fontSize: 17 }}>{opt.label}</Typography>
-                    <Typography sx={{ color: "#ffb300", fontWeight: 700 }}>
-                      {opt.points} Points
-                    </Typography>
-                  </Box>
-                  <Button
-                    variant="contained"
-                    color="warning"
-                    sx={{ fontWeight: 900, borderRadius: 2, px: 4 }}
-                    onClick={() => setRedirect(true)}
-                  >
-                    {opt.price}
-                  </Button>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
+              Shop Options
+            </Typography>
+            {pointOptions.map(opt => (
+              <Box
+                key={opt.label}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  bgcolor: "rgba(255,255,255,0.06)",
+                  px: 3, py: 2, borderRadius: 2, mb: 1.5,
+                }}>
+                <Box>
+                  <Typography sx={{ fontWeight: 700, fontSize: 17 }}>{opt.label}</Typography>
+                  <Typography sx={{ color: "#ffb300", fontWeight: 700 }}>
+                    {opt.points} Points
+                  </Typography>
                 </Box>
-              ))}
-            </Box>
-          )}
-        </Box>
-      </Slide>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  sx={{ fontWeight: 900, borderRadius: 2, px: 4 }}
+                  onClick={() => setRedirect(true)}
+                >
+                  {opt.price}
+                </Button>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </Box>
     </Modal>
   );
 }
