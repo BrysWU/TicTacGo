@@ -30,7 +30,8 @@ export default function Leaderboard({ onClose }) {
                 <Avatar src={p.avatar ? `${AVATAR_URL}${p.avatar}` : undefined} sx={{ bgcolor: "#ffb300" }}>{!p.avatar && p.username[0]}</Avatar>
                 <Typography sx={{ fontWeight: 700, flex: 1 }}>{p.username}</Typography>
                 <Typography color="success.main" sx={{ fontWeight: 800, mr: 2 }}>🏆 {p.wins}</Typography>
-                <Typography color="error.main" sx={{ fontWeight: 800 }}>❌ {p.losses}</Typography>
+                <Typography color="error.main" sx={{ fontWeight: 800, mr: 2 }}>❌ {p.losses}</Typography>
+                <Typography color="info.main" sx={{ fontWeight: 800 }}>💰 {typeof p.points === "number" ? p.points : "N/A"}</Typography>
               </Stack>
             ))}
           </Box>
