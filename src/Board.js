@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Box, Typography, Button, Paper, Avatar, Fade, Stack, Slide, Modal, TextField } from "@mui/material";
+import React, { useEffect, useState, useRef } from "react";
+import { Box, Typography, Button, Paper, Avatar, Fade, Stack, Slide, Modal, IconButton } from "@mui/material";
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Chat from "./Chat";
 
 const winningColors = {
@@ -18,12 +20,13 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
   const [opponentLeft, setOpponentLeft] = useState(false);
   const [animateCell, setAnimateCell] = useState(Array(9).fill(false));
   const [bettingOpen, setBettingOpen] = useState(gameState.bettingOpen ?? false);
-  const [bets, setBets] = useState(gameState.bets ?? { X: null, O: null });
-  const [myBet, setMyBet] = useState("");
+  const [bets, setBets] = useState(gameState.bets ?? { X: 0, O: 0 });
+  const [myBet, setMyBet] = useState(0);
   const [betError, setBetError] = useState("");
-  const [betResult, setBetResult] = useState("");
   const [bettingClosed, setBettingClosed] = useState(false);
   const [bettingTimer, setBettingTimer] = useState(10);
+  const [betEdit, setBetEdit] = useState(false);
+  const betInputRef = useRef();
 
   useEffect(() => {
     const handleUpdate = ({ board, turn, winner, players, bets: newBets }) => {
@@ -61,10 +64,10 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
   useEffect(() => {
     if (bettingOpen) {
       setBettingClosed(false);
-      setBetResult("");
       setBetError("");
-      setBets({ X: null, O: null });
+      setBets({ X: 0, O: 0 });
       setBettingTimer(10);
+      setMyBet(0);
       const interval = setInterval(() => {
         setBettingTimer((prev) => {
           if (prev <= 1) {
@@ -90,6 +93,33 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
     }
     socket.emit("placeBet", { gameId, amount: amt });
     setBetError("");
+  };
+
+  // For the bet input: allow up/down, and also allow clicking the number and typing
+  const canEditBet = bettingOpen && you.points > 0;
+  const handleArrowUp = () => {
+    if (!canEditBet) return;
+    setMyBet((b) => Math.min((you.points ?? 0), Number(b) + 1));
+  };
+  const handleArrowDown = () => {
+    if (!canEditBet) return;
+    setMyBet((b) => Math.max(0, Number(b) - 1));
+  };
+  const handleBetNumberClick = () => {
+    if (!canEditBet) return;
+    setBetEdit(true);
+    setTimeout(() => {
+      if (betInputRef.current) betInputRef.current.focus();
+    }, 50);
+  };
+  const handleBetInputBlur = () => {
+    setBetEdit(false);
+  };
+  const handleBetInputChange = (e) => {
+    let val = e.target.value.replace(/\D/g, "");
+    if (val === "") val = "0";
+    val = Math.max(0, Math.min(Number(val), you.points ?? 0));
+    setMyBet(val);
   };
 
   const handleClick = (idx) => {
@@ -176,22 +206,60 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
             <HourglassTopIcon sx={{ mb: 2, fontSize: 40 }} />
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>Place your bet!</Typography>
             <Typography sx={{ mb: 2 }}>You have {bettingTimer} seconds to place your bet.<br />Winner takes the pot. Each win gives +25 points bonus.<br />If only one player bets, all bets are cancelled.</Typography>
-            <TextField
-              label="Points to bet"
-              type="number"
-              value={myBet}
-              disabled={you.points <= 0}
-              onChange={e => setMyBet(e.target.value)}
-              inputProps={{ min: 0, max: you.points ?? 0 }}
-              sx={{ mb: 1, bgcolor: "#fff", borderRadius: 1, width: "70%" }}
-            />
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mb: 1 }}>
+              <IconButton aria-label="Up" onClick={handleArrowUp} disabled={!canEditBet} size="large">
+                <ArrowDropUpIcon sx={{ fontSize: 40 }} />
+              </IconButton>
+              {betEdit ? (
+                <input
+                  ref={betInputRef}
+                  style={{
+                    fontSize: 36,
+                    fontWeight: "bold",
+                    color: "#fff",
+                    background: "transparent",
+                    border: "none",
+                    outline: "none",
+                    width: "90px",
+                    textAlign: "center"
+                  }}
+                  type="text"
+                  value={myBet}
+                  onChange={handleBetInputChange}
+                  onBlur={handleBetInputBlur}
+                  maxLength={7}
+                  disabled={!canEditBet}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                />
+              ) : (
+                <Typography
+                  sx={{
+                    fontSize: 36,
+                    fontWeight: "bold",
+                    color: "#fff",
+                    minWidth: 90,
+                    cursor: canEditBet ? "pointer" : "default",
+                    userSelect: "none",
+                  }}
+                  onClick={handleBetNumberClick}
+                  tabIndex={canEditBet ? 0 : -1}
+                  aria-label="Edit bet amount"
+                >
+                  {myBet}
+                </Typography>
+              )}
+              <IconButton aria-label="Down" onClick={handleArrowDown} disabled={!canEditBet} size="large">
+                <ArrowDropDownIcon sx={{ fontSize: 40 }} />
+              </IconButton>
+            </Box>
             <Box>
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={handlePlaceBet}
                 disabled={you.points <= 0}
-                sx={{ mt: 1, fontWeight: 700 }}
+                sx={{ mt: 1, fontWeight: 700, fontSize: 18, borderRadius: 3 }}
               >
                 Bet
               </Button>
