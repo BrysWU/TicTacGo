@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Modal, Box, Typography, Avatar, Button, Stack, TextField, IconButton } from "@mui/material";
+import { Modal, Box, Typography, Avatar, Button, CircularProgress, Stack, LinearProgress, TextField, IconButton } from "@mui/material";
 import { useAuth } from "./AuthContext";
 import UploadIcon from "@mui/icons-material/Upload";
 import EditIcon from "@mui/icons-material/Edit";
@@ -96,12 +96,18 @@ export default function Profile({ onClose }) {
               disabled={uploading}
               sx={{ mt: 1 }}
             >Change Avatar</Button>
-            <input type="file" ref={fileRef} accept="image/*" style={{ display: "none" }} onChange={handleAvatar} />
-            {uploadMsg && <Typography sx={{ color: "success.main", mt: 1 }}>{uploadMsg}</Typography>}
+            <input ref={fileRef} type="file" hidden accept="image/*" onChange={handleAvatar} />
           </Box>
         </Stack>
-        {nameMsg && <Typography sx={{ color: nameMsg.includes("updated") ? "success.main" : "error.main", mb: 1 }}>{nameMsg}</Typography>}
-        <Button onClick={onClose} sx={{ mt: 2, width: "100%" }} variant="contained" color="primary">Close</Button>
+        {uploading && <LinearProgress sx={{ mb: 2 }} />}
+        {(uploadMsg || nameMsg) && <Typography color="success.main" sx={{ mb: 2 }}>{uploadMsg || nameMsg}</Typography>}
+        <Typography variant="subtitle1" sx={{ fontWeight: 700, mt: 2 }}>Stats</Typography>
+        <Stack direction="row" spacing={2} sx={{ mt: 1, mb: 2 }}>
+          <Box><b>Wins:</b> {user.wins}</Box>
+          <Box><b>Losses:</b> {user.losses}</Box>
+          <Box><b>Draws:</b> {user.draws}</Box>
+        </Stack>
+        <Button variant="contained" color="secondary" fullWidth onClick={onClose}>Close</Button>
       </Box>
     </Modal>
   );
