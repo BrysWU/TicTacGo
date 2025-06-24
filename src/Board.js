@@ -21,6 +21,7 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
   const [animateCell, setAnimateCell] = useState(Array(9).fill(false));
   const [bettingOpen, setBettingOpen] = useState(gameState.bettingOpen ?? false);
   const [bets, setBets] = useState(gameState.bets ?? { X: 0, O: 0 });
+  const [locked, setLocked] = useState({ X: false, O: false });
   const [myBet, setMyBet] = useState(0);
   const [betError, setBetError] = useState("");
   const [bettingClosed, setBettingClosed] = useState(false);
@@ -34,15 +35,22 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
       setTurn(turn);
       setWinner(winner);
       setPlayers(players || {});
-      if (newBets) setBets(newBets);
+      if (newBets) {
+        setBets(newBets);
+        if (newBets.locked) setLocked(newBets.locked);
+      }
       if (winner) setAnimateCell(Array(9).fill(false));
     };
     const handleBettingClosed = (b) => {
       setBettingOpen(false);
       setBettingClosed(true);
       setBets(b);
+      if (b.locked) setLocked(b.locked);
     };
-    const handleBetUpdate = (b) => setBets(b);
+    const handleBetUpdate = (b) => {
+      setBets(b);
+      if (b.locked) setLocked(b.locked);
+    };
     const handleBetError = (err) => setBetError(err);
 
     socket.on("gameUpdate", handleUpdate);
@@ -65,7 +73,8 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
     if (bettingOpen) {
       setBettingClosed(false);
       setBetError("");
-      setBets({ X: 0, O: 0 });
+      setBets({ X: 0, O: 0, locked: { X: false, O: false } });
+      setLocked({ X: false, O: false });
       setBettingTimer(10);
       setMyBet(0);
       const interval = setInterval(() => {
@@ -80,6 +89,8 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
       return () => clearInterval(interval);
     }
   }, [bettingOpen, gameId]);
+
+  const canEditBet = bettingOpen && you.points > 0 && !locked[symbol];
 
   const handlePlaceBet = () => {
     const amt = parseInt(myBet, 10);
@@ -96,7 +107,6 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
   };
 
   // For the bet input: allow up/down, and also allow clicking the number and typing
-  const canEditBet = bettingOpen && you.points > 0;
   const handleArrowUp = () => {
     if (!canEditBet) return;
     setMyBet((b) => Math.min((you.points ?? 0), Number(b) + 1));
@@ -258,19 +268,20 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
                 variant="contained"
                 color="secondary"
                 onClick={handlePlaceBet}
-                disabled={you.points <= 0}
+                disabled={you.points <= 0 || locked[symbol]}
                 sx={{ mt: 1, fontWeight: 700, fontSize: 18, borderRadius: 3 }}
               >
-                Bet
+                {locked[symbol] ? "Locked" : "Bet"}
               </Button>
             </Box>
+            {locked[symbol] && <Typography sx={{ color: "lime", mt: 2 }}>Bet locked in. Waiting for other player...</Typography>}
             {betError && <Typography sx={{ color: "red", mt: 1 }}>{betError}</Typography>}
             {you.points <= 0 && <Typography sx={{ color: "orange", mt: 2 }}>You have no points left. Play & win to earn more!</Typography>}
             <Box sx={{ mt: 2 }}>
               <Typography sx={{ fontSize: 14 }}>Current bets:</Typography>
               <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 1 }}>
-                <Typography>X: {bets.X ?? "—"}</Typography>
-                <Typography>O: {bets.O ?? "—"}</Typography>
+                <Typography>X: {bets.X ?? "—"}{locked.X ? " 🔒" : ""}</Typography>
+                <Typography>O: {bets.O ?? "—"}{locked.O ? " 🔒" : ""}</Typography>
               </Stack>
             </Box>
           </Box>
