@@ -75,7 +75,7 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
       setBetError("");
       setBets({ X: 0, O: 0, locked: { X: false, O: false } });
       setLocked({ X: false, O: false });
-      setBettingTimer(10);
+      setBettingTimer(15);
       setMyBet(0);
       const interval = setInterval(() => {
         setBettingTimer((prev) => {
