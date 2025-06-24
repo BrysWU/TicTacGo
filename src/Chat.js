@@ -40,6 +40,11 @@ export default function Chat({ socket, gameId, you, opponent, disabled }) {
     return id === you.id ? you : opponent;
   }
 
+  function getAvatarSrc(user) {
+    // Use base64 avatar string if present, else undefined
+    return user.avatar || undefined;
+  }
+
   return (
     <Fade in timeout={600}>
       <Box>
@@ -62,7 +67,14 @@ export default function Chat({ socket, gameId, you, opponent, disabled }) {
                 spacing={1}
                 sx={{ mb: 0.5, alignItems: "flex-end", justifyContent: isMe ? "flex-end" : "flex-start" }}
               >
-                {!isMe && <Avatar src={user.avatar ? `https://ttgback.onrender.com${user.avatar}` : undefined} sx={{ width: 24, height: 24, fontSize: 14, bgcolor: "#00e5ff" }}>{!user.avatar && user.username[0]}</Avatar>}
+                {!isMe && (
+                  <Avatar
+                    src={getAvatarSrc(user)}
+                    sx={{ width: 24, height: 24, fontSize: 14, bgcolor: "#00e5ff" }}
+                  >
+                    {!user.avatar && user.username[0]}
+                  </Avatar>
+                )}
                 <Box
                   sx={{
                     bgcolor: isMe ? "#ffb300" : "#00e5ff",
@@ -79,7 +91,14 @@ export default function Chat({ socket, gameId, you, opponent, disabled }) {
                 >
                   {msg.text}
                 </Box>
-                {isMe && <Avatar src={user.avatar ? `https://ttgback.onrender.com${user.avatar}` : undefined} sx={{ width: 24, height: 24, fontSize: 14, bgcolor: "#ffb300" }}>{!user.avatar && user.username[0]}</Avatar>}
+                {isMe && (
+                  <Avatar
+                    src={getAvatarSrc(user)}
+                    sx={{ width: 24, height: 24, fontSize: 14, bgcolor: "#ffb300" }}
+                  >
+                    {!user.avatar && user.username[0]}
+                  </Avatar>
+                )}
               </Stack>
             );
           })}
