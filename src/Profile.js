@@ -83,31 +83,52 @@ export default function Profile({ onClose }) {
             ) : (
               <Stack direction="row" spacing={1} alignItems="center">
                 <Typography sx={{ fontWeight: 700, fontSize: 20 }}>{user.username}</Typography>
-                <IconButton color="primary" size="small" onClick={() => setEditName(true)} sx={{ ml: -0.5 }}>
+                <IconButton size="small" onClick={() => setEditName(true)} sx={{ color: "#ffb300" }}>
                   <EditIcon fontSize="small" />
                 </IconButton>
               </Stack>
             )}
-            <Button
-              variant="outlined"
-              color="secondary"
-              startIcon={<UploadIcon />}
-              onClick={() => fileRef.current.click()}
-              disabled={uploading}
-              sx={{ mt: 1 }}
-            >Change Avatar</Button>
-            <input ref={fileRef} type="file" hidden accept="image/*" onChange={handleAvatar} />
+            {nameMsg && <Typography sx={{ color: "#ffb300", fontSize: 13 }}>{nameMsg}</Typography>}
           </Box>
         </Stack>
-        {uploading && <LinearProgress sx={{ mb: 2 }} />}
-        {(uploadMsg || nameMsg) && <Typography color="success.main" sx={{ mb: 2 }}>{uploadMsg || nameMsg}</Typography>}
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, mt: 2 }}>Stats</Typography>
-        <Stack direction="row" spacing={2} sx={{ mt: 1, mb: 2 }}>
-          <Box><b>Wins:</b> {user.wins}</Box>
-          <Box><b>Losses:</b> {user.losses}</Box>
-          <Box><b>Draws:</b> {user.draws}</Box>
+        <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
+          <Button
+            variant="contained"
+            component="label"
+            startIcon={<UploadIcon />}
+            sx={{
+              bgcolor: "#ffb300",
+              color: "#002147",
+              fontWeight: 700,
+              "&:hover": { bgcolor: "#ffc947" }
+            }}
+            disabled={uploading}
+          >
+            Upload Avatar
+            <input hidden accept="image/*" type="file" ref={fileRef} onChange={handleAvatar} />
+          </Button>
+          {uploading && <CircularProgress size={24} sx={{ color: "#ffb300" }} />}
+          {uploadMsg && <Typography sx={{ color: "#ffb300", fontSize: 13 }}>{uploadMsg}</Typography>}
         </Stack>
-        <Button variant="contained" color="secondary" fullWidth onClick={onClose}>Close</Button>
+        <Box sx={{ mt: 2 }}>
+          <Button
+            onClick={onClose}
+            sx={{
+              padding: 1.5,
+              width: "100%",
+              borderRadius: 6,
+              background: "#ffb300",
+              fontWeight: 700,
+              fontSize: 16,
+              border: 0,
+              color: "#002147",
+              "&:hover": { background: "#ffc947" }
+            }}
+          >
+            Close
+          </Button>
+        </Box>
+        {loading && <LinearProgress sx={{ mt: 2, bgcolor: "#19213a" }} />}
       </Box>
     </Modal>
   );
