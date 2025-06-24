@@ -1,12 +1,10 @@
 import React, { useState, useRef } from "react";
-import { Modal, Box, Typography, Avatar, Button, CircularProgress, Stack, LinearProgress, TextField, IconButton } from "@mui/material";
+import { Modal, Box, Typography, Avatar, Button, Stack, TextField, IconButton } from "@mui/material";
 import { useAuth } from "./AuthContext";
 import UploadIcon from "@mui/icons-material/Upload";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-
-const AVATAR_URL = "https://ttgback.onrender.com/avatars/";
 
 export default function Profile({ onClose }) {
   const { user, uploadAvatar, loading, updateUsername } = useAuth();
@@ -54,7 +52,7 @@ export default function Profile({ onClose }) {
         <Typography variant="h5" sx={{ fontWeight: 900, mb: 2 }}>Your Profile</Typography>
         <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
           <Avatar
-            src={user.avatar ? `${AVATAR_URL}${user.avatar}` : undefined}
+            src={user.avatar || undefined}
             sx={{ width: 70, height: 70, fontSize: 30, bgcolor: "#ffb300" }}
           >
             {!user.avatar && user.username[0]}
@@ -98,18 +96,12 @@ export default function Profile({ onClose }) {
               disabled={uploading}
               sx={{ mt: 1 }}
             >Change Avatar</Button>
-            <input ref={fileRef} type="file" hidden accept="image/*" onChange={handleAvatar} />
+            <input type="file" ref={fileRef} accept="image/*" style={{ display: "none" }} onChange={handleAvatar} />
+            {uploadMsg && <Typography sx={{ color: "success.main", mt: 1 }}>{uploadMsg}</Typography>}
           </Box>
         </Stack>
-        {uploading && <LinearProgress sx={{ mb: 2 }} />}
-        {(uploadMsg || nameMsg) && <Typography color="success.main" sx={{ mb: 2 }}>{uploadMsg || nameMsg}</Typography>}
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, mt: 2 }}>Stats</Typography>
-        <Stack direction="row" spacing={2} sx={{ mt: 1, mb: 2 }}>
-          <Box><b>Wins:</b> {user.wins}</Box>
-          <Box><b>Losses:</b> {user.losses}</Box>
-          <Box><b>Draws:</b> {user.draws}</Box>
-        </Stack>
-        <Button variant="contained" color="secondary" fullWidth onClick={onClose}>Close</Button>
+        {nameMsg && <Typography sx={{ color: nameMsg.includes("updated") ? "success.main" : "error.main", mb: 1 }}>{nameMsg}</Typography>}
+        <Button onClick={onClose} sx={{ mt: 2, width: "100%" }} variant="contained" color="primary">Close</Button>
       </Box>
     </Modal>
   );
