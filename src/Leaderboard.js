@@ -25,7 +25,9 @@ export default function Leaderboard({ onClose }) {
             {players.map((p, i) => (
               <Stack key={p.id} direction="row" alignItems="center" spacing={2} sx={{ mb: 1 }}>
                 <Typography sx={{ width: 24, fontWeight: 900 }}>{i + 1}</Typography>
-                <Avatar src={p.avatar || undefined} sx={{ bgcolor: "#ffb300" }}>{!p.avatar && p.username[0]}</Avatar>
+                <Avatar src={p.avatar || undefined} sx={{ bgcolor: "#ffb300" }}>
+                  {!p.avatar && p.username[0]}
+                </Avatar>
                 <Typography sx={{ fontWeight: 700, flex: 1 }}>{p.username}</Typography>
                 <Typography color="success.main" sx={{ fontWeight: 800, mr: 2 }}>🏆 {p.wins}</Typography>
                 <Typography color="error.main" sx={{ fontWeight: 800, mr: 2 }}>❌ {p.losses}</Typography>
