@@ -79,7 +79,7 @@ export function AuthProvider({ children }) {
       headers: { Authorization: `Bearer ${token}` }
     });
     await refreshProfile();
-    return { ok: true, avatar: data.avatar };
+    return { ok: true, url: `${API_URL}${data.url}` };
   }
 
   async function updateUsername(newUsername) {
