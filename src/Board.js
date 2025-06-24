@@ -178,7 +178,7 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
         <Stack direction="row" alignItems="center" justifyContent="center" spacing={4} sx={{ mb: 3 }}>
           <Box sx={{ textAlign: "center" }}>
             <Avatar
-              src={Xplayer.avatar ? `https://ttgback.onrender.com${Xplayer.avatar}` : undefined}
+              src={getAvatar(Xplayer)}
               sx={{ bgcolor: "#232f4b", mx: "auto", mb: 1, fontWeight: 700, width: 48, height: 48, fontSize: 26 }}
             >{!Xplayer.avatar && Xplayer.username[0]}</Avatar>
             <Typography sx={{ fontWeight: 700 }}>
@@ -193,7 +193,7 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
           <Typography variant="h5" sx={{ fontWeight: 900, opacity: 0.5, mt: 2 }}>VS</Typography>
           <Box sx={{ textAlign: "center" }}>
             <Avatar
-              src={Oplayer.avatar ? `https://ttgback.onrender.com${Oplayer.avatar}` : undefined}
+              src={getAvatar(Oplayer)}
               sx={{ bgcolor: "#232f4b", mx: "auto", mb: 1, fontWeight: 700, width: 48, height: 48, fontSize: 26 }}
             >{!Oplayer.avatar && Oplayer.username[0]}</Avatar>
             <Typography sx={{ fontWeight: 700 }}>
