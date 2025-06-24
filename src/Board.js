@@ -215,7 +215,8 @@ const Board = ({ gameState, setGameState, onPlayAgain }) => {
           }}>
             <HourglassTopIcon sx={{ mb: 2, fontSize: 40 }} />
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>Place your bet!</Typography>
-            <Typography sx={{ mb: 2 }}>You have {bettingTimer} seconds to place your bet.<br />Winner takes the pot. Each win gives +25 points bonus.<br />If only one player bets, all bets are cancelled.</Typography>
+            <Typography sx={{ mb: 2 }}>Betting Ends in {bettingTimer} seconds.<br /></Typography>
+            <Typography sx={{ mb: 2 }}>Winner takes the pot. Each win gives +25 points bonus.<br />If only one player bets, all bets are cancelled.</Typography>
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mb: 1 }}>
               <IconButton aria-label="Up" onClick={handleArrowUp} disabled={!canEditBet} size="large">
                 <ArrowDropUpIcon sx={{ fontSize: 40 }} />
