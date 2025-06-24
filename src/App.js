@@ -171,10 +171,7 @@ function App() {
       </Dialog>
       <Dialog open={registerOpen} onClose={() => setRegisterOpen(false)}>
         <Register
-          onSwitch={() => {
-            setRegisterOpen(false);
-            setLoginOpen(true);
-          }}
+          onSwitch={() => setRegisterOpen(false) || setLoginOpen(true)}
           onBack={() => setRegisterOpen(false)}
           onSignupSuccess={() => setRegisterOpen(false)}
         />
