@@ -40,11 +40,6 @@ export default function Chat({ socket, gameId, you, opponent, disabled }) {
     return id === you.id ? you : opponent;
   }
 
-  function getAvatarSrc(user) {
-    // Use base64 avatar string if present, else undefined
-    return user.avatar || undefined;
-  }
-
   return (
     <Fade in timeout={600}>
       <Box>
@@ -67,14 +62,7 @@ export default function Chat({ socket, gameId, you, opponent, disabled }) {
                 spacing={1}
                 sx={{ mb: 0.5, alignItems: "flex-end", justifyContent: isMe ? "flex-end" : "flex-start" }}
               >
-                {!isMe && (
-                  <Avatar
-                    src={getAvatarSrc(user)}
-                    sx={{ width: 24, height: 24, fontSize: 14, bgcolor: "#00e5ff" }}
-                  >
-                    {!user.avatar && user.username[0]}
-                  </Avatar>
-                )}
+                {!isMe && <Avatar src={user.avatar ? `https://ttgback.onrender.com${user.avatar}` : undefined} sx={{ width: 24, height: 24, fontSize: 14, bgcolor: "#00e5ff" }}>{!user.avatar && user.username[0]}</Avatar>}
                 <Box
                   sx={{
                     bgcolor: isMe ? "#ffb300" : "#00e5ff",
@@ -91,42 +79,34 @@ export default function Chat({ socket, gameId, you, opponent, disabled }) {
                 >
                   {msg.text}
                 </Box>
-                {isMe && (
-                  <Avatar
-                    src={getAvatarSrc(user)}
-                    sx={{ width: 24, height: 24, fontSize: 14, bgcolor: "#ffb300" }}
-                  >
-                    {!user.avatar && user.username[0]}
-                  </Avatar>
-                )}
+                {isMe && <Avatar src={user.avatar ? `https://ttgback.onrender.com${user.avatar}` : undefined} sx={{ width: 24, height: 24, fontSize: 14, bgcolor: "#ffb300" }}>{!user.avatar && user.username[0]}</Avatar>}
               </Stack>
             );
           })}
           <div ref={chatEndRef} />
         </Box>
-        <form onSubmit={handleSend}>
-          <Stack direction="row" spacing={1}>
-            <TextField
-              value={text}
-              onChange={e => setText(e.target.value)}
-              placeholder="Type your message..."
-              size="small"
-              fullWidth
-              autoComplete="off"
-              sx={{
-                bgcolor: "#19213a",
-                color: "#fff",
-                input: { color: "#fff", fontWeight: 700 }
-              }}
-              InputProps={{
-                style: { color: "#fff", fontWeight: 700 }
-              }}
-              disabled={disabled}
-            />
-            <IconButton type="submit" color="primary" disabled={disabled || !text.trim()} sx={{ bgcolor: "#ffb300", color: "#002147", "&:hover": { bgcolor: "#ffc947" } }}>
-              <SendIcon />
-            </IconButton>
-          </Stack>
+        <form onSubmit={handleSend} style={{ display: "flex", alignItems: "center" }}>
+          <TextField
+            value={text}
+            onChange={e => setText(e.target.value)}
+            placeholder="Type a message..."
+            size="small"
+            fullWidth
+            disabled={disabled}
+            sx={{
+              bgcolor: "rgba(255,255,255,0.07)",
+              input: { color: "#fff" }
+            }}
+            InputProps={{ style: { color: "#fff" } }}
+          />
+          <IconButton
+            color="secondary"
+            type="submit"
+            disabled={disabled || !text.trim()}
+            sx={{ ml: 1 }}
+          >
+            <SendIcon />
+          </IconButton>
         </form>
       </Box>
     </Fade>
