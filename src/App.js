@@ -21,6 +21,7 @@ import Register from "./Register";
 import Profile from "./Profile";
 import Leaderboard from "./Leaderboard";
 import PersonIcon from "@mui/icons-material/Person";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 
 function App() {
   const { user, logout } = useAuth();
@@ -65,7 +66,27 @@ function App() {
           >
             TicTacGo
           </Typography>
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            {user && (
+              <Stack direction="row" alignItems="center" spacing={1} sx={{
+                bgcolor: "rgba(255,255,255,0.08)",
+                borderRadius: 2,
+                px: 2,
+                py: 0.5,
+                mr: 1,
+              }}>
+                <MonetizationOnIcon sx={{ color: "#ffb300", fontSize: 22, mr: 0.2 }} />
+                <Typography sx={{
+                  fontWeight: 700,
+                  fontSize: 18,
+                  color: "#ffb300",
+                  letterSpacing: 0.5,
+                  userSelect: "none"
+                }}>
+                  {typeof user.points === "number" ? user.points : "—"}
+                </Typography>
+              </Stack>
+            )}
             <Button color="inherit" onClick={() => setShowLeaderboard(true)}>
               Leaderboard
             </Button>
@@ -171,7 +192,10 @@ function App() {
       </Dialog>
       <Dialog open={registerOpen} onClose={() => setRegisterOpen(false)}>
         <Register
-          onSwitch={() => setRegisterOpen(false) || setLoginOpen(true)}
+          onSwitch={() => {
+            setRegisterOpen(false);
+            setLoginOpen(true);
+          }}
           onBack={() => setRegisterOpen(false)}
           onSignupSuccess={() => setRegisterOpen(false)}
         />
